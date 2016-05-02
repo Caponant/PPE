@@ -1,19 +1,4 @@
 <?php
-/**
- *  Bibliothèque de fonctions AccesDonnees.php
- * 
- *
- * 
- * @author Erwan
- * @copyright Estran
- * @version 3.0 du Mercredi 27 Avril 2016 13:08
- *  - 
- * 	- Enregistrement des connexions dans un fichier log.txt possible
- * 
- */
-
-
-
 ///////////// CONFIGURATION DE L'ACCES AUX DONNEES ////////////////////
 
 // nom du moteur d'accès à la base : mysql - mysqli
