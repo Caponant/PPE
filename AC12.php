@@ -129,20 +129,22 @@
 			<table border="0" style="width:80%" >
 				<?php
 				//selection l'id de la nouvelle tournée 
-				$sql = "SELECT MAX(TRNNUM) FROM tournee"; 
-				//$IdTournee = mysql_query($sql)+1
-				$IdTournee = "123456";
+				$sql = "SELECT max(TRNNUM) FROM tournee"; 
+				$IdTournee = executeSQL($sql);
+				$row = mysql_fetch_row($IdTournee);
+				//$IdTournee = "123456";
 					
-
+				
 				//selection id de la ville 
-				$sql = "SELECT LIEUID FROM etape where TRNNUM = $IdTournee"; 
-				$villeid = executeSQL($connexion, $sql);				
-				echo" ---> $villeid";
+				$sql = "SELECT LIEUID FROM etape where TRNNUM = $row[0]"; 
+				$villeid = executeSQL( $sql);
+				$row = mysql_fetch_row($villeid);
+			
 				
 				//cherche la ville avec l'id
-				$sql = "SELECT LIEUID,LIEUNOM FROM lieu where LIEUID = '$villeid'"; 
-				$cpt = compteSQL($connexion, $sql);
-				echo" ---> $cpt <---";
+				$sql = "SELECT LIEUID,LIEUNOM FROM lieu where LIEUID = '$row[0]'"; 
+				$cpt = compteSQL($sql);
+	
 				if ($cpt>0) {	
 					while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {
 						echo "<tr>";

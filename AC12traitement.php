@@ -10,8 +10,8 @@
 	$ajouter =$_GET['ajouter'];
 //test pour voir si il s'agie d'une creation d'etape
 
-if $valide = "valider"{
-echo "valider"
+if ($valide = "valider"){
+echo "valider";
 	//inclu la fonction sql
 	include 'connectAD.php';
 
@@ -21,7 +21,7 @@ echo "valider"
 		or die ("Erreur SQL de <b>".$_SERVER["SCRIPT_NAME"]."</b>.<br />Dans le fichier : ".__FILE__." a la ligne : ".__LINE__."<br />".mysql_error()."<br /><br /><b>REQUETE SQL : </b>$sql<br />");
 }
 
-if $ajouter = "ajouter"{
-echo "ajouter" 
+if ($ajouter = "ajouter"){
+echo "ajouter"; 
 }
 ?>
