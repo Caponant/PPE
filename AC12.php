@@ -105,9 +105,9 @@
 	    	<input id="valider" name="valider" type="submit"  value="valider" 
 							<?php
 				$sql = "SELECT * FROM etape"; 
-				$result = mysql_query($sql)				
+				$result1 = mysql_query($sql)				
 					or die ("Erreur SQL de <b>".$_SERVER["SCRIPT_NAME"]."</b>.<br />Dans le fichier : ".__FILE__." a la ligne : ".__LINE__."<br />".mysql_error()."<br /><br /><b>REQUETE SQL : </b>$sql<br />");
-				$cpt=mysql_num_rows($result);
+				$cpt=mysql_num_rows($result1);
 				
 				if ($cpt==0){
 					echo("disabled=\"disabled\"");
@@ -130,23 +130,22 @@
 				<?php
 				//selection l'id de la nouvelle tournée 
 				$sql = "SELECT max(TRNNUM) FROM tournee"; 
-				$IdTournee = executeSQL($sql);
-				$row = mysql_fetch_row($IdTournee);
-				//$IdTournee = "123456";
-					
+				$result = executeSQL($sql);
+				$IdTournee = mysql_fetch_row($result);
 				
+					
 				//selection id de la ville 
-				$sql = "SELECT LIEUID FROM etape where TRNNUM = $row[0]"; 
-				$villeid = executeSQL( $sql);
-				$row = mysql_fetch_row($villeid);
-			
+				$sql = "SELECT LIEUID FROM etape where TRNNUM = $IdTournee[0]	"; 
+				$result = executeSQL( $sql);
+				$villeid = mysql_fetch_row($result);
+				
 				
 				//cherche la ville avec l'id
-				$sql = "SELECT LIEUID,LIEUNOM FROM lieu where LIEUID = '$row[0]'"; 
+				$sql = "SELECT LIEUID,LIEUNOM FROM lieu where LIEUID = '$villeid[0]'"; 
 				$cpt = compteSQL($sql);
-	
+				
 				if ($cpt>0) {	
-					while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {
+					while ($row = mysql_fetch_array($result1, MYSQL_BOTH)) {
 						echo "<tr>";
 								echo ("<td>$row[0]</td>");
 								echo("<td>$row[1]</td>");
