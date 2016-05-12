@@ -1,12 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
-
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
-	<meta http-equiv="content-language" content="fr" />
-	<title>AC12</title>
-</head>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+		<meta http-equiv="content-language" content="fr" />
+		<title>AC12</title>
+	</head>
 
 	<body>
 		<form id="formulaire" action="./AC12traitement.php" method="get">
@@ -25,7 +24,7 @@
 				size="10" maxlength="8"/>
 			</p>
 			
-			<!-- La Selection des chauffeurs sur la base de donnée  -->
+			<!-- La Selection des chauffeurs sur la base de donnÃ©e  -->
 
 			<p>
 			<label for="chauffeur" >chauffeur : </label>
@@ -54,7 +53,7 @@
 			</p>
 			
 			
-			<!-- La Selection de la voiture dans la base de donnée  -->
+			<!-- La Selection de la voiture dans la base de donnÃ©e  -->
 			<p>
 			
 			<label for="voiture" >vehicule : </label>
@@ -126,9 +125,9 @@
 	    </p>
 		</form>
 			
-			<table border="0" style="width:80%" >
-				<?php
-				//selection l'id de la nouvelle tournée 
+		<table border="0" style="width:80%" >
+			<?php
+				//selection l'id de la nouvelle tournÃ©e 
 				$sql = "SELECT max(TRNNUM) FROM tournee"; 
 				$result = executeSQL($sql);
 				$IdTournee = mysql_fetch_row($result);
@@ -150,20 +149,16 @@
 								echo ("<td>$row[0]</td>");
 								echo("<td>$row[1]</td>");
 								echo("<td><img src=\"./image/cross.png\" alt=\"eurre\"></td>");
-								echo("<td><img src=\"./image/modif.png\" alt=\"\"></td>");
+								echo("<td><img src=\"./image/modif02.png\" alt=\"\"></td>");
 							echo"</tr>";
 							
 					}					
 				} else {
 					echo "<p>Aucune etape en cour...</p>";
 				}         
-    		?>	
-			
+    		?>
 
-			</table>
-			<form id="ajouter" action="./AC12traitement.php" method="get">
-				<input id="ajouter" name="ajouter" type="submit" value="ajouter" title="" />
-			</form>
-
+		</table>
+		<input id="ajouter" type="button" name="ajouter" value="Ajouter"  onclick="location.href='./AC13.php'" />
 	</body>
 </html>
