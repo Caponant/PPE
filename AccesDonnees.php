@@ -7,10 +7,7 @@ $modeacces = "mysql";
 // enregistrement des logs de connexion : true false
 $logcnx = FALSE;
 
-
 //////////////////////////////////////////////////////////////////////
-
-
 
 $mysql_data_type_hash = array(
 		1=>'tinyint',
@@ -32,8 +29,6 @@ $mysql_data_type_hash = array(
 		254=>'string',
 		246=>'decimal'
 );
-
-
 
 /**
  * 
@@ -111,13 +106,11 @@ function connexion($host,$port,$dbname,$user,$password) {
 
 }
 
-
 function ecritFichier($uneChaine) {
 	$handle=fopen("log.txt","a");
 		fwrite($handle,$uneChaine);
 	fclose($handle);
 }
-
 
 /**
  *
@@ -137,8 +130,6 @@ function deconnexion() {
 	}
 
 }
-
-
 
 /**
  *
@@ -164,7 +155,7 @@ function executeSQL($sql) {
 			 Dans le fichier : ".__FILE__." a la ligne : ".__LINE__."<br />".
 				mysql_error().
 				"<br /><br />
-				<b>REQUETE SQL : </b>$sql<br />");		
+				<b>REQUETE SQL : </b>$sql<br />");	
 		return $result;
 	}
 
@@ -178,8 +169,6 @@ function executeSQL($sql) {
 		return $result;
 	}
 }
-
-
 
 /**
  *
@@ -208,8 +197,6 @@ function compteSQL($sql) {
 	}
 
 }
-
-
 
 /**
  *
@@ -243,8 +230,6 @@ function tableSQL($sql) {
 
 }
 
-
-
 /**
  *
  *Retourne un seul champ résultat d'une requete MySQL.
@@ -272,8 +257,6 @@ function champSQL($sql) {
 
 }
 
-
-
 /**
  *
  *Retourne le nombre de champs d'une requete MySQL
@@ -299,8 +282,6 @@ function nombrechamp($sql) {
 	}
 
 }
-
-
 
 /**
  *
@@ -330,7 +311,5 @@ function typechamp($sql, $field_offset) {
 	}
 
 }
-
-
 
 ?>
