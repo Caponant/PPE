@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
@@ -36,7 +37,7 @@
 					
 					$result = mysql_query($sql);
 					
-					if($result) {	
+					if($result) {
 						while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {
 				?>	
 					<tr>
@@ -47,12 +48,12 @@
 						<td> 
 							<?php
 								//on recupere le numero de la tournee et le met dans une variable
-								$tourneeNum = $row['TRNNUM'];
+								$TRNNUM = $row['TRNNUM'];
 								//on fait la requette en concatenant avec la variable en question
 								$depart_sql =  "SELECT LIEUNOM 
 												FROM lieu,etape
 												WHERE etape.LIEUID = lieu.LIEUID
-												AND etape.TRNNUM = ".$tourneeNum."
+												AND etape.TRNNUM = ".$TRNNUM."
 												ORDER BY ETPHREDEBUT ASC;";
 								$depart = mysql_query($depart_sql); 
 								$depart = mysql_fetch_array($depart,MYSQL_BOTH);
@@ -66,7 +67,7 @@
 								$arrivee_sql =  "SELECT LIEUNOM 
 												FROM lieu,etape
 												WHERE etape.LIEUID = lieu.LIEUID
-												AND etape.TRNNUM = ".$tourneeNum."
+												AND etape.TRNNUM = ".$TRNNUM."
 												ORDER BY ETPHREDEBUT DESC;";
 								//execution de la requette avec mysql_query				
 								$arrivee = mysql_query($arrivee_sql); 
@@ -77,14 +78,14 @@
 						</td>
 													
 						<td> 
-							<form id="form_effacer" action="supprimer.php">
-								<input id="tournee" name="tournee" type="hidden" value='".$tourneeNum."' />
-								<input id="effacer" name="effacer" type="submit" value="Supprimer" /> 
+							<form id="supprimer" action="supprimer.php">
+								<input id="tournee" name="tournee" type="hidden" value="<?php echo"$TRNNUM"?>" />
+								<input id="supprimer" name="supprimer" type="submit" value="Supprimer" /> 
 							</form> 
 						</td>
 						
 						<td> 
-							<form id="form_modifier" action="modifier.php"> 
+							<form id="modifier" action="modifier.php"> 
 								<input id="modifier" name="modifier" type="button" value="Modifier" /> 
 							</form> 
 						</td>
@@ -97,7 +98,7 @@
 		</div>
 		
 		<br/>
-		<input id="add" type="button" name="add" value="Ajouter"  onclick="location.href=''" />
+		<input id="add" type="button" name="add" value="Ajouter"  onclick="location.href='./AC12.php'" />
 		<input id="back" type="button" name="retour" value="Retour" onclick="location.href=''" />
 		
 		<?php 
