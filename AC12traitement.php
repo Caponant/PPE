@@ -17,7 +17,7 @@
 		$sql = "SELECT max(TRNNUM) FROM tournee";
 		$result = executeSQL($sql);
 		$IdTournee = mysql_fetch_row($result);
-		
+
 		//recherche de l'id du chauffeur
 		$sql = "SELECT CHFID FROM chauffeur where CHFNOM = '$chauffeur'";
 		$result = executeSQL( $sql);

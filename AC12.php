@@ -17,7 +17,7 @@
 				<input id="date" name="date" type="text" 
 				
 				value="<?php 
-							$date =date("d/m/y H:i");
+							$date =date("Y/m/d H:i");
 							echo($date)
 						?>" 
 				
@@ -86,7 +86,7 @@
 				<label for="prisEnCharge">pris en charge le : </label>
 				<input id="prisEnCharge" name="prisEnCharge" type="text" 
 				value="<?php 
-							$date =date("d/m/y H:i");
+							$date =date("Y/m/d H:i:00");
 							echo($date)
 						?> " readonly
 				size="10" maxlength="8"/>
@@ -127,33 +127,50 @@
 			
 		<table border="0" style="width:80%" >
 			<?php
-				//selection l'id de la nouvelle tournÃ©e 
-				$sql = "SELECT max(TRNNUM) FROM tournee"; 
-				$result = executeSQL($sql);
-				$IdTournee = mysql_fetch_row($result);
-				
+				//si il recois un numero il regarde si il y a des etapes associer .
+				//if ($TRNNUM = $_GET['TRNNUM'])
+				if ($TRNNUM = 1)
+				{
+					echo "<tr>
+							<td>Numero de l'etape</td>
+							<td>Nom du lieu</td>";
 					
-				//selection id de la ville 
-				$sql = "SELECT LIEUID FROM etape where TRNNUM = $IdTournee[0]	"; 
-				$result = executeSQL( $sql);
-				$villeid = mysql_fetch_row($result);
-				
-				
-				//cherche la ville avec l'id
-				$sql = "SELECT LIEUID,LIEUNOM FROM lieu where LIEUID = '$villeid[0]'"; 
-				$cpt = compteSQL($sql);
-				
-				if ($cpt>0) {	
-					while ($row = mysql_fetch_array($result1, MYSQL_BOTH)) {
+					//selection id de la ville
+					$sql = "SELECT ETPID,LIEUID FROM etape where TRNNUM = $TRNNUM	";
+					$result = mysql_query( $sql);
+					$cpt = compteSQL($sql);
+					echo"$cpt";
+					for($r = 0 ;$r != $cpt ;$r++)
+					
+					{
+						$row = mysql_fetch_array($result, MYSQL_BOTH);
+						//cherche la ville avec l'id
+						$sql = "SELECT LIEUNOM FROM lieu where LIEUID = '$row[1]'";
+						$result = executeSQL( $sql);
+						$villenom = mysql_fetch_row($result);
+						
 						echo "<tr>";
-								echo ("<td>$row[0]</td>");
-								echo("<td>$row[1]</td>");
-								echo("<td><img src=\"./image/cross.png\" alt=\"eurre\"></td>");
-								echo("<td><img src=\"./image/modif02.png\" alt=\"\"></td>");
-							echo"</tr>";
-							
-					}					
+						echo ("<td>$row[$r]</td>");
+						echo("<td>$villenom[0]</td>");
+						echo("<td><img src=\"./image/cross.png\" alt=\"eurre\onclick=
+								\"
+									$sql = \"DELETE FROM 'etape' WHERE TRNNUM = $TRNNUM AND ETPID = $r \";
+									$result = executeSQL( $sql);
+								\" style=\"cursor:pointer;\"></td>");
+					
+						echo("<td><img src=\"./image/modif02.png\" alt=\"erreur\"onclick=\"\" style=\"cursor:pointer;\" ></td>");
+						echo"</tr>";
+						
+					}
+					
 				} else {
+					//selection l'id de la nouvelle tournÃ©e
+						
+					$sql = "SELECT max(TRNNUM) FROM tournee";
+					$result = executeSQL($sql);
+					$IdTournee = mysql_fetch_row($result);
+						
+					echo"</tr>";
 					echo "<p>Aucune etape en cour...</p>";
 				}         
     		?>
