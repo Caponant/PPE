@@ -152,13 +152,14 @@
 						echo "<tr>";
 						echo ("<td>$row[$r]</td>");
 						echo("<td>$villenom[0]</td>");
-						echo("<td><img src=\"./image/cross.png\" alt=\"eurre\onclick=
-								\"
-									$sql = \"DELETE FROM 'etape' WHERE TRNNUM = $TRNNUM AND ETPID = $r \";
-									$result = executeSQL( $sql);
-								\" style=\"cursor:pointer;\"></td>");
+						echo("<td>
+								<form id='supprimer' action='supprimer-etape.php'>
+									<input id='idetape' name='idetape' type='hidden' value='1' />
+									<input id='tournee' name='tournee' type='hidden' value='$TRNNUM'/>
+									<input id='supprimer' name='supprimer' type='submit' value='Supprimer' /> 
+								</form> </td>");
 					
-						echo("<td><img src=\"./image/modif02.png\" alt=\"erreur\"onclick=\"\" style=\"cursor:pointer;\" ></td>");
+						echo("<td><img src=\"./image/modif02.png\" alt=\"erreur\"onclick=\"location.href='./AC13.php'\" style=\"cursor:pointer;\" ></td>");
 						echo"</tr>";
 						
 					}
@@ -177,5 +178,13 @@
 
 		</table>
 		<input id="ajouter" type="button" name="ajouter" value="Ajouter"  onclick="location.href='./AC13.php'" />
+			<?php 
+		
+			if (isset($_GET['message']))
+				echo $_GET['message'];
+				else
+					echo "&nbsp;";
+				
+		?>
 	</body>
 </html>
