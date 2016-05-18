@@ -6,14 +6,6 @@
 	switch ($ip[0]) {
 
 		case 127 :
-			//local
-			$host = "127.0.0.1";
-			$user = "root";
-			$password = "";
-			$dbname = "mlr1";
-			$port='3306';
-			break;
-			
 		case 192 :
 		//local
 			$host = "127.0.0.1";
@@ -29,13 +21,13 @@
 	}
 	
 	$connexion=connexion($host,$port,$dbname,$user,$password);
-/*	
-	if ($connexion) {
+	
+/*	if ($connexion) {
 		echo "Connexion reussie<br />";
 		echo "Base $dbname selectionnee... <br />";
 		echo "Mode acces : $modeacces<br />";
 	}
-
-*/	
+*/
+	
 ?>
 

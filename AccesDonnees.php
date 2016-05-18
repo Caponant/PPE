@@ -1,13 +1,17 @@
 <?php
+
 ///////////// CONFIGURATION DE L'ACCES AUX DONNEES ////////////////////
 
-// nom du moteur d'accÃ¨s Ã  la base : mysql - mysqli
+// nom du moteur d'accès à la base : mysql - mysqli
 $modeacces = "mysql";
 
 // enregistrement des logs de connexion : true false
 $logcnx = FALSE;
 
+
 //////////////////////////////////////////////////////////////////////
+
+
 
 $mysql_data_type_hash = array(
 		1=>'tinyint',
@@ -30,13 +34,15 @@ $mysql_data_type_hash = array(
 		246=>'decimal'
 );
 
+
+
 /**
  * 
- * Ouvre une connexion Ã  un serveur MySQL et sÃ©lectionne une base de donnÃ©es.
+ * Ouvre une connexion à un serveur MySQL et sélectionne une base de données.
  * @param host string
  *  <p>Adresse du serveur MySQL.</p>
  * @param port integer
- *  <p>NumÃ©ro du port du serveur MySQL.</p>
+ *  <p>Numéro du port du serveur MySQL.</p>
  * @param dbname string
  *  <p>Nom de la base de donnees.</p>
  * @param user string
@@ -44,7 +50,7 @@ $mysql_data_type_hash = array(
  * @param password string
  *  <p>Mot de passe de l'utilisateur.</p>
  * 
- * @return Retourne l'identifiant de connexion MySQL en cas de succÃ¨s 
+ * @return Retourne l'identifiant de connexion MySQL en cas de succès 
  *         ou FALSE si une erreur survient.
  */
 function connexion($host,$port,$dbname,$user,$password) {
@@ -65,17 +71,17 @@ function connexion($host,$port,$dbname,$user,$password) {
 			
 			@$connexion = mysql_select_db("$dbname");
 			if (!$connexion) {
-				$chaine = "Selection base PB - ".date("j M Y - G:i:s - ").$user." - ". mysql_error()."\r\n";	
+				/*$chaine = "Selection base PB - ".date("j M Y - G:i:s - ").$user." - ". mysql_error()."\r\n";*/
 			} else {
-				$chaine = "Connexion OK - ".date("j M Y - G:i:s - ").$user."\r\n";	
+				/*$chaine = "Connexion OK - ".date("j M Y - G:i:s - ").$user."\r\n";*/
 			}
 			
 		}
 		
 		if ($logcnx)
 			ecritFichier($chaine);
-		/*else
-			echo $chaine."<br />";*/		
+		else
+			/*echo $chaine."<br />";*/	
 		
 		return $connexion;
 		
@@ -87,30 +93,32 @@ function connexion($host,$port,$dbname,$user,$password) {
 		@$connexion = new mysqli("$host", "$user", "$password", "$dbname", $port);
 		if ($connexion->connect_error) {
 			
-			$chaine = "Connexion PB - ".date("j M Y - G:i:s - ").$user." - ". $connexion->connect_error."\r\n";
+			/*$chaine = "Connexion PB - ".date("j M Y - G:i:s - ").$user." - ". $connexion->connect_error."\r\n";*/
 			$connexion = FALSE;
 			
 		} else {
 			
-			 $chaine = "Connexion OK - ".date("j M Y - G:i:s - ").$user."\r\n";
+			 /*$chaine = "Connexion OK - ".date("j M Y - G:i:s - ").$user."\r\n";*/
 			 
 		}
 		
 		if ($logcnx)
 			ecritFichier($chaine);
 		else
-			echo $chaine."<br />";		
+			/*echo $chaine."<br />";*/
 		
 		return $connexion;
 	}		
 
 }
 
+
 function ecritFichier($uneChaine) {
 	$handle=fopen("log.txt","a");
 		fwrite($handle,$uneChaine);
 	fclose($handle);
 }
+
 
 /**
  *
@@ -131,19 +139,21 @@ function deconnexion() {
 
 }
 
+
+
 /**
  *
- *Envoie une requÃªte Ã  un serveur MySQL.
+ *Envoie une requête à un serveur MySQL.
  * @param sql string
  *  <p>Requete SQL.</p>
  *
  *
- * @return  Pour les requÃªtes du type SELECT, SHOW, DESCRIBE, EXPLAIN et 
- *          les autres requÃªtes retournant un jeu de rÃ©sultats, mysql_query() 
- *          retournera une ressource en cas de succÃ¨s, ou FALSE en cas d'erreur.
+ * @return  Pour les requêtes du type SELECT, SHOW, DESCRIBE, EXPLAIN et 
+ *          les autres requêtes retournant un jeu de résultats, mysql_query() 
+ *          retournera une ressource en cas de succès, ou FALSE en cas d'erreur.
  *          
- *          Pour les autres types de requÃªtes, INSERT, UPDATE, DELETE, DROP, etc., 
- *          mysql_query() retourne TRUE en cas de succÃ¨s ou FALSE en cas d'erreur. 
+ *          Pour les autres types de requêtes, INSERT, UPDATE, DELETE, DROP, etc., 
+ *          mysql_query() retourne TRUE en cas de succès ou FALSE en cas d'erreur. 
  */
 function executeSQL($sql) {
 
@@ -155,7 +165,7 @@ function executeSQL($sql) {
 			 Dans le fichier : ".__FILE__." a la ligne : ".__LINE__."<br />".
 				mysql_error().
 				"<br /><br />
-				<b>REQUETE SQL : </b>$sql<br />");	
+				<b>REQUETE SQL : </b>$sql<br />");		
 		return $result;
 	}
 
@@ -170,6 +180,8 @@ function executeSQL($sql) {
 	}
 }
 
+
+
 /**
  *
  *Retourne le nombre de lignes d'une requete MySQL.
@@ -177,7 +189,7 @@ function executeSQL($sql) {
  *  <p>Requete SQL.</p>
  *
  *
- * @return Le nombre de lignes dans un jeu de rÃ©sultats en cas de succÃ¨s 
+ * @return Le nombre de lignes dans un jeu de résultats en cas de succès 
  *         ou FALSE si une erreur survient. 
  */
 function compteSQL($sql) {
@@ -198,14 +210,16 @@ function compteSQL($sql) {
 
 }
 
+
+
 /**
  *
- *Retourne un tableau rÃ©sultat d'une requete MySQL.
+ *Retourne un tableau résultat d'une requete MySQL.
  * @param sql string
  *  <p>Requete SQL.</p>
  *
  *
- * @return un tableau rÃ©sultat de la requete MySQL.
+ * @return un tableau résultat de la requete MySQL.
  */
 function tableSQL($sql) {
 
@@ -230,14 +244,16 @@ function tableSQL($sql) {
 
 }
 
+
+
 /**
  *
- *Retourne un seul champ rÃ©sultat d'une requete MySQL.
+ *Retourne un seul champ résultat d'une requete MySQL.
  * @param sql string
  *  <p>Requete SQL.</p>
  *
  *
- * @return une chaine rÃ©sultat de la requete MySQL.
+ * @return une chaine résultat de la requete MySQL.
  */
 function champSQL($sql) {
 
@@ -257,6 +273,8 @@ function champSQL($sql) {
 
 }
 
+
+
 /**
  *
  *Retourne le nombre de champs d'une requete MySQL
@@ -264,7 +282,7 @@ function champSQL($sql) {
  *  <p>Requete SQL.</p>
  *
  *
- * @return Retourne le nombre de champs d'un jeu de rÃ©sultat en cas de succÃ¨s 
+ * @return Retourne le nombre de champs d'un jeu de résultat en cas de succès 
  *         ou FALSE si une erreur survient. 
  */
 function nombrechamp($sql) {
@@ -283,18 +301,20 @@ function nombrechamp($sql) {
 
 }
 
+
+
 /**
  *
- *Retourne le type d'une colonne MySQL spÃ©cifique
+ *Retourne le type d'une colonne MySQL spécifique
  * @param sql string
  *  <p>Requete SQL.</p>
  * @param field_offset integer
- *  <p>La position numÃ©rique du champ. field_offset commence Ã  0. Si field_offset 
- *     n'existe pas, une alerte E_WARNING sera Ã©galement gÃ©nÃ©rÃ©e.</p>
+ *  <p>La position numérique du champ. field_offset commence à 0. Si field_offset 
+ *     n'existe pas, une alerte E_WARNING sera également générée.</p>
  *
  *
- * @return Retourne le type du champ retournÃ© peut Ãªtre : "int", "real", "string", "blob" 
- *         ou d'autres, comme dÃ©taillÃ© Â» dans la documentation MySQL.
+ * @return Retourne le type du champ retourné peut être : "int", "real", "string", "blob" 
+ *         ou d'autres, comme détaillé » dans la documentation MySQL.
  */
 function typechamp($sql, $field_offset) {
 
@@ -311,5 +331,7 @@ function typechamp($sql, $field_offset) {
 	}
 
 }
+
+
 
 ?>

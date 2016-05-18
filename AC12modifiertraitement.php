@@ -9,15 +9,8 @@
 		$voiture = $_GET['voiture'];
 		$commentaire = $_GET['commentaire'];
 		$prisEnCharge =$_GET['prisEnCharge'];
-	
-		//recherche du dernier id 
-		$sql = "SELECT max(TRNNUM) 
-				FROM tournee";
+		$TRNNUM = $_GET['tournee'];
 		
-		$result = executeSQL($sql);
-		
-		$IdTournee = mysql_fetch_row($result);
-
 		//recherche de l'id du chauffeur
 		$sql = "SELECT CHFID 
 				FROM chauffeur 
@@ -28,14 +21,15 @@
 		$chauffeurid = mysql_fetch_row($result);
 		
 		// envoie les informations sur la bdd
-		$sql = "INSERT INTO tournee(TRNNUM, VEHIMMAT, CHFID, TRNCOMMENTAIRE, TRNDTE) 
-				VALUES ($IdTournee[0]+1,'$voiture',$chauffeurid[0],'$commentaire','$prisEnCharge')";
+		$sql = "UPDATE tournee
+				SET VEHIMMAT = '$voiture', CHFID = '$chauffeurid[0]', TRNCOMMENTAIRE = '$commentaire', TRNDTE = '$prisEnCharge'
+				WHERE TRNNUM = '$TRNNUM'";
 		
 		$result = executeSQL($sql);
 	}
 	
 	if ($result)
-		echo "<meta http-equiv='refresh' content='0;url=index.php?message=<font color=green> Ajout realisee ! </font>'>";
+		echo "<meta http-equiv='refresh' content='0;url=index.php?message=<font color=green> Modification realisee ! </font>'>";
 		else
-			echo "<meta http-equiv='refresh' content='0;url=index.php?message=<font color=red> Probleme d'ajout ... </font>'>";
+			echo "<meta http-equiv='refresh' content='0;url=index.php?message=<font color=red> Probleme de modification ... </font>'>";
 ?>

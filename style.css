@@ -1,0 +1,15 @@
+table {
+	width: 100%;
+}
+
+.title {
+	background: #9bbb58;
+}
+
+div.tableau table tr:nth-child(2n+1) {
+	background: #eaf2dd;
+}
+
+div.tableau table tr:nth-child(2n) {
+	background: #d8e5ba;
+}
