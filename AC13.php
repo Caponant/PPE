@@ -61,6 +61,8 @@
 			<br/>
 			<br/>
 			
+			
+			
 			<input id="tournee" name="tournee" type="hidden" value="<?php echo "$TRNNUM" ?>" />
 			<input id="valider" name="valider" type="submit" value="Valider"/>
 			<input id="effacer" name="effacer" type="reset" value="Effacer"/>
