@@ -6,9 +6,18 @@
 	switch ($ip[0]) {
 
 		case 127 :
-		case 192 :
-		case 31 :
 		//local
+			$host = "127.0.0.1";
+			$user = "root";
+			$password = "";
+			$dbname = "mlr1";
+			$port='3306';
+			break;
+			
+		case 192 :
+			
+		case 31 :
+		//hostinger
 			$host = "mysql.hostinger.fr";
 			$user = "u847412209_root";
 			$password = "C@pon@nt29200";
