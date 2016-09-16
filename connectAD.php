@@ -7,11 +7,12 @@
 
 		case 127 :
 		case 192 :
+		case 31 :
 		//local
-			$host = "127.0.0.1";
-			$user = "root";
-			$password = "";
-			$dbname = "mlr1";
+			$host = "mysql.hostinger.fr";
+			$user = "u847412209_root";
+			$password = "C@pon@nt29200";
+			$dbname = "u847412209_mlr1";
 			$port='3306';
 			break;
 			
@@ -30,4 +31,3 @@
 */
 	
 ?>
-
