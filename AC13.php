@@ -65,7 +65,7 @@
 			
 			<input id="tournee" name="tournee" type="hidden" value="<?php echo "$TRNNUM" ?>" />
 			<input id="valider" name="valider" type="submit" value="Valider"/>
-			<input id="effacer" name="effacer" type="reset" value="Effacer"/>
+			<input id="cancel" type="button" name="retour" value="Annuler" onclick="location.href='AC12.php'" />
 		</form>
 	</body>
 
