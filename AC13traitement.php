@@ -23,7 +23,7 @@
 	$result = mysql_query($sql);
 	
 	if ($result)
-		echo "<meta http-equiv='refresh' content='0;url=AC12_modifier.php?message=<font color=green> Ajout realisee ! </font> <input id=\"tournee\" name=\"tournee\" type=\"hidden\" value=\"<?php echo \"$TRNNUM\" ?>\" />'>";
+		echo "<meta http-equiv='refresh' content='0;url=AC12.php?message=<font color=green> Ajout realisee ! </font> <input id=\"tournee\" name=\"tournee\" type=\"hidden\" value=\"<?php echo \"$TRNNUM\" ?>\" />'>";
 		else
-			echo "<meta http-equiv='refresh' content='0;url=AC12_modifier.php?message=<font color=red> Probleme pour ajouter ... </font>'>";
+			echo "<meta http-equiv='refresh' content='0;url=AC12.php?message=<font color=red> Probleme pour ajouter ... </font>'>";
 ?>
