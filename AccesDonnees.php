@@ -1,12 +1,33 @@
 <?php
+/**
+ *  Bibliothèque de fonctions AccesDonnees.php
+ * 
+ *
+ * 
+ * @author Erwan
+ * @copyright Estran
+ * @version 4.5 Mardi 20 Septembre 2016
+ *
+ * Implementation PDO des fonctions :
+ *    + compteSQL
+ *    + tableSQL
+ *    + compteSQL
+ *    + champSQL
+ *    + versionSQL
+ *    
+ *    
+ */
 
 ///////////// CONFIGURATION DE L'ACCES AUX DONNEES ////////////////////
 
-// nom du moteur d'accès à la base : mysql - mysqli
-$modeacces = "mysql";
+// nom du moteur d'accès à la base : mysql - mysqli - pdo
+$modeacces = "pdo";
 
-// enregistrement des logs de connexion : true false
-$logcnx = FALSE;
+// enregistrement des logs de connexion : true - false
+$logcnx = TRUE;
+
+// enregistrement des requetes SQL : none - all - modif
+$logsql = "none";
 
 
 //////////////////////////////////////////////////////////////////////
@@ -56,34 +77,56 @@ $mysql_data_type_hash = array(
 function connexion($host,$port,$dbname,$user,$password) {
 	
 	global $modeacces, $logcnx, $connexion;
-	
 
+	/*  TEST CNX PDO
+	 * 
+	 */
+	if ($modeacces=="pdo") {
+		// ceation du Data Source Name, ou DSN, qui contient les infos
+		// requises pour se connecter à la base.
+		$dsn='mysql:host='.$host.';port='.$port.';dbname='.$dbname;
+		
+		try
+		{
+			$connexion = new PDO($dsn, $user, $password);
+		}
+		
+		catch(Exception $e)
+		{
+			/*echo 'Erreur : '.$e->getMessage().'<br />';
+			echo 'N° : '.$e->getCode();
+			die();*/
+			$chaine = "Connexion PB - ".date("j M Y - G:i:s - ").$user." - ". $e->getCode() . " - ". $e->getMessage()."\r\n";
+			$connexion = FALSE;
+		}
+		
+		if ($connexion) {
+			$chaine = "Connexion OK - ".date("j M Y - G:i:s - ").$user."\r\n";
+		}
+		
+	}
+	
+	
+	
+	
+	
 	
 	if ($modeacces=="mysql") {
 			
 		@$link = mysql_connect("$host:$port", "$user", "$password");
 		
-		if (!$link) {
-			
+		if (!$link) {	
 			$chaine = "Connexion PB - ".date("j M Y - G:i:s - ").$user." - ". mysql_error()."\r\n";	
-			
-		} else {
-			
+			$connexion = FALSE;		
+		} else {			
 			@$connexion = mysql_select_db("$dbname");
 			if (!$connexion) {
-				/*$chaine = "Selection base PB - ".date("j M Y - G:i:s - ").$user." - ". mysql_error()."\r\n";*/
+				$chaine = "Selection base PB - ".date("j M Y - G:i:s - ").$user." - ". mysql_error()."\r\n";	
+				$connexion = FALSE;
 			} else {
-				/*$chaine = "Connexion OK - ".date("j M Y - G:i:s - ").$user."\r\n";*/
-			}
-			
+				$chaine = "Connexion OK - ".date("j M Y - G:i:s - ").$user."\r\n";	
+			}			
 		}
-		
-		if ($logcnx)
-			ecritFichier($chaine);
-		else
-			/*echo $chaine."<br />";*/	
-		
-		return $connexion;
 		
 	}
 
@@ -91,33 +134,28 @@ function connexion($host,$port,$dbname,$user,$password) {
 	if ($modeacces=="mysqli") {
 		
 		@$connexion = new mysqli("$host", "$user", "$password", "$dbname", $port);
+		
 		if ($connexion->connect_error) {
-			
-			/*$chaine = "Connexion PB - ".date("j M Y - G:i:s - ").$user." - ". $connexion->connect_error."\r\n";*/
-			$connexion = FALSE;
-			
-		} else {
-			
-			 /*$chaine = "Connexion OK - ".date("j M Y - G:i:s - ").$user."\r\n";*/
-			 
+			$chaine = "Connexion PB - ".date("j M Y - G:i:s - ").$user." - ". $connexion->connect_error."\r\n";
+			$connexion = FALSE;		
+		} else {		
+			 $chaine = "Connexion OK - ".date("j M Y - G:i:s - ").$user."\r\n";		 
 		}
 		
-		if ($logcnx)
-			ecritFichier($chaine);
-		else
-			/*echo $chaine."<br />";*/
-		
-		return $connexion;
 	}		
 
+	
+	if ($logcnx) {
+		$handle=fopen("log.txt","a");
+			fwrite($handle,$chaine);
+		fclose($handle);	
+	} else {
+		//echo $chaine."<br />";
+	}
+	return $connexion;
+	
 }
 
-
-function ecritFichier($uneChaine) {
-	$handle=fopen("log.txt","a");
-		fwrite($handle,$uneChaine);
-	fclose($handle);
-}
 
 
 /**
@@ -157,29 +195,68 @@ function deconnexion() {
  */
 function executeSQL($sql) {
 
-	global $modeacces, $connexion;
+	global $modeacces, $connexion, $logsql;
+	
+	$uneChaine = date("j M Y - G:i:s --> ").$sql."\r\n";
+	
+	if ($logsql=="all") {
+	
+		ecritRequeteSQL($uneChaine);
+	
+	} else {
+	
+		if ($logsql=="modif") {
+	
+			$mot=strtolower(substr($sql,0, 6));
+			if ($mot=="insert" || $mot=="update") {
+				ecritRequeteSQL($uneChaine);
+			}
+	
+		}
+	
+	}
 
+	if ($modeacces=="pdo") {
+		$result = $connexion->query($sql)
+		 or die ( afficheErreur($sql,$connexion->errorInfo()[2]));
+	}
+	
 	if ($modeacces=="mysql") {
 		$result = mysql_query($sql)		
-		or die ("Erreur SQL de <b>".$_SERVER["SCRIPT_NAME"]."</b>.<br />
-			 Dans le fichier : ".__FILE__." a la ligne : ".__LINE__."<br />".
-				mysql_error().
-				"<br /><br />
-				<b>REQUETE SQL : </b>$sql<br />");		
-		return $result;
+		or die (afficheErreur($sql, mysql_error()));		
+
 	}
 
 	if ($modeacces=="mysqli") {
-		$result = $connexion->query($sql)		
-		or die ("Erreur SQL de <b>".$_SERVER["SCRIPT_NAME"]."</b>.<br />
-			 Dans le fichier : ".__FILE__." a la ligne : ".__LINE__."<br />".
-				mysqli_error_list($connexion)[0]['error'].      //$mysqli->error_list;
-				"<br /><br />
-				<b>REQUETE SQL : </b>$sql<br />");				
-		return $result;
+		$result = $connexion->query($sql)	
+		//or die (afficheErreur($sql, mysqli_error_list($connexion)[0]['error']));
+		or die (afficheErreur($sql, $connexion->error_list[0]['error']));
+				
+
 	}
+	
+	return $result;
 }
 
+function afficheErreur($sql, $erreur) {
+	
+	$uneChaine = "ERREUR SQL : ".date("j M Y - G:i:s.u --> ").$sql." : ($erreur) \r\n";
+	
+	ecritRequeteSQL($uneChaine);
+	
+	return "Erreur SQL de <b>".$_SERVER["SCRIPT_NAME"].
+	       "</b>.<br />Dans le fichier : ".__FILE__.
+	       " a la ligne : ".__LINE__.
+	       "<br />".$erreur.
+			"<br /><br /><b>REQUETE SQL : </b>$sql<br />";
+	
+}
+
+function ecritRequeteSQL($uneChaine) {
+	$handle=fopen("requete.sql","a");
+		fwrite($handle,$uneChaine);
+	fclose($handle);
+}
 
 
 /**
@@ -196,18 +273,26 @@ function compteSQL($sql) {
 
 	global $modeacces, $connexion;
 	
-	$result = executeSQL($sql);
+	if ($modeacces="pdo") {
+		//utilisation d'une requete prepare 
+		$reqprep=$connexion->prepare($sql);
+		//execution de la requete preparee
+		$reqprep->execute();
+		$num_rows=$reqprep->rowCount();
+	}
 
 	if ($modeacces=="mysql") {
+		$result = executeSQL($sql);
 		$num_rows = mysql_num_rows($result);
-		return $num_rows;
 	}
 
 	if ($modeacces=="mysqli") {
+		$result = executeSQL($sql);
 		$num_rows = $connexion->affected_rows;
-		return $num_rows;
+	
 	}
-
+	
+	return $num_rows;
 }
 
 
@@ -220,6 +305,18 @@ function compteSQL($sql) {
  *
  *
  * @return un tableau résultat de la requete MySQL.
+ * 
+ * exemple : 	$sql = "select * from user";
+
+				$results = tableSQL($sql);
+
+				foreach ($results as $ligne) {
+					//on extrait chaque valeur de la ligne courante
+					$login = $ligne['login'];
+					$password = $ligne[3];
+	
+					echo $login." ".$password."<br />";
+				}	
  */
 function tableSQL($sql) {
 
@@ -227,21 +324,25 @@ function tableSQL($sql) {
 	
 	$result = executeSQL($sql);
 	$rows=array();
+	
+	if ($modeacces=="pdo") {
+		$rows = $result->fetchAll(PDO::FETCH_BOTH);
+	}
 
 	if ($modeacces=="mysql") {
 		while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {
 			array_push($rows,$row);
 		}
-		return $rows;
 	}
 
 	if ($modeacces=="mysqli") {
 		while ($row = $result->fetch_array(MYSQLI_BOTH)) {
 			array_push($rows,$row);
 		}
-		return $rows;
-	}
 
+	}
+		
+	return $rows;
 }
 
 
@@ -261,16 +362,20 @@ function champSQL($sql) {
 	
 	$result = executeSQL($sql);
 	
+	if ($modeacces="pdo") {
+		$rows=$result->fetch(PDO::FETCH_BOTH);	
+	}
+	
 	if ($modeacces=="mysql") {
 		$rows = mysql_fetch_array($result, MYSQL_NUM);
-		return $rows[0];
 	}
 
 	if ($modeacces=="mysqli") {
 		$rows = $result->fetch_array(MYSQLI_NUM);
-		return $rows[0];
+		
 	}
-
+	
+	return $rows[0];
 }
 
 
@@ -289,13 +394,21 @@ function nombrechamp($sql) {
 
 	global $modeacces, $connexion;
 	
-	$result = executeSQL($sql);
+	if ($modeacces="pdo") {
+		//utilisation d'une requete prepare
+		$reqprep=$connexion->prepare($sql);
+		//execution de la requete preparee
+		$reqprep->execute();
+		return $reqprep->columnCount();
+	}
 
 	if ($modeacces=="mysql") {
+		$result = executeSQL($sql);
 		return mysql_num_fields($result);
 	}
 
 	if ($modeacces=="mysqli") {
+		$result = executeSQL($sql);
 		return  $result->field_count;
 	}
 
@@ -316,11 +429,24 @@ function nombrechamp($sql) {
  * @return Retourne le type du champ retourné peut être : "int", "real", "string", "blob" 
  *         ou d'autres, comme détaillé » dans la documentation MySQL.
  */
+
+//TODO verifier la coherence des type
 function typechamp($sql, $field_offset) {
 
 	global $modeacces, $connexion, $mysql_data_type_hash;
 
 	$result = executeSQL($sql);
+	
+	
+	if ($modeacces=="pdo") {
+	
+		/* getColumnMeta est EXPERIMENTALE. Cela signifie que le comportement de cette fonction, son nom et,
+		 * concrètement, TOUT ce qui est documenté ici peut changer dans un futur proche, SANS PREAVIS !
+		 * Soyez-en conscient, et utilisez cette fonction à vos risques et périls. */
+		$select = $connexion->query($sql);
+		$meta = $select->getColumnMeta($field_offset);
+		return ($meta["native_type"]);
+	}
 	
 	if ($modeacces=="mysql") {
 		return mysql_field_type($result, $field_offset);
@@ -328,6 +454,33 @@ function typechamp($sql, $field_offset) {
 
 	if ($modeacces=="mysqli") {
 		return  $mysql_data_type_hash[$result->fetch_field_direct($field_offset)->type];	
+	}
+
+}
+
+
+/**
+ *
+ *Retourne la version du serveur MySQL
+ *
+ *
+ * @return Retourne une chaîne de caractères représentant la version du serveur MySQL 
+ *         auquel l'extension  est connectée (représenté par le paramètre $connexion). 
+ */
+function versionMYSQL() {
+
+	global $modeacces, $connexion;
+	
+	if ($modeacces="pdo") {
+		return $connexion->getAttribute(constant("PDO::ATTR_SERVER_VERSION"));
+	}
+
+	if ($modeacces=="mysql") {
+		return mysql_get_server_info();
+	}
+
+	if ($modeacces=="mysqli") {
+		return   $connexion->server_info;
 	}
 
 }
