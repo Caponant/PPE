@@ -8,13 +8,14 @@
 	</head>
 	
 	<body>
+		<!-- création du tableau des tourée  --> 
 		<div class="tableau">
 			<table>
 				<thead>
 					<tr height="30" class="title">
 						<th class="title" colspan="8"> AC11 - Organiser les tourn&eacute;es - Listes des tourn&eacute;es </th>
 					</tr>
-						
+					<!-- titre des colones --> 	
 					<tr height="30">
 					    <th>Tourn&eacute;e</th>
 					    <th>Date</th>
@@ -28,8 +29,10 @@
 				</thead>
 
 				<?php
+					//insertion de la connection a la base de données 
 					include 'connectAD.php';
 					
+					//selection les infos pour la tournée 
 					$sql = "SELECT TRNNUM,TRNDTE,CHFNOM,VEHIMMAT 
 							FROM tournee,chauffeur 
 							WHERE tournee.CHFID=chauffeur.CHFID;";
@@ -38,7 +41,9 @@
 					
 					if($result) {	
 						while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {
-				?>	
+				?>
+					
+				<!-- creation des ligne des tournée --> 
 					<tr>
 						<td><?php echo $row['TRNNUM']; ?></td>
 						<td><?php echo $row['TRNDTE']; ?></td>
@@ -46,6 +51,7 @@
 						<td><?php echo $row['VEHIMMAT']; ?></td>
 						<td> 
 							<?php
+								//ajout de l'info "depart"
 								$TRNNUM = $row['TRNNUM'];
 								
 								$depart_sql =  "SELECT LIEUNOM 
@@ -54,8 +60,8 @@
 												AND etape.TRNNUM = ".$TRNNUM."
 												ORDER BY ETPHREDEBUT ASC;";
 								
-								$depart = mysql_query($depart_sql); 
-								$depart = mysql_fetch_array($depart,MYSQL_BOTH);
+								$depart = executeSQL($depart_sql); 
+								$depart = tableSQL($depart);
 								
 								echo $depart[0]; 
 							?>
@@ -63,14 +69,15 @@
 							
 						<td> 
 							<?php
+								//ajout de l'info "arrivee"
 								$arrivee_sql =  "SELECT LIEUNOM 
 												FROM lieu,etape
 												WHERE etape.LIEUID = lieu.LIEUID
 												AND etape.TRNNUM = ".$TRNNUM."
 												ORDER BY ETPHREDEBUT DESC;";
 								
-								$arrivee = mysql_query($arrivee_sql); 
-								$arrivee = mysql_fetch_array($arrivee,MYSQL_BOTH);
+								$arrivee = executeSQL($arrivee_sql); 
+								$arrivee = tableSQL($arrivee);
 								
 								echo $arrivee[0]; 
 							?>
