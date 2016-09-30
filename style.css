@@ -6,10 +6,10 @@ table {
 	background: #9bbb58;
 }
 
-div.tableau table tr:nth-child(2n+1) {
+div.tableau table tr:nth-child(odd) {
 	background: #eaf2dd;
 }
 
-div.tableau table tr:nth-child(2n) {
+div.tableau table tr:nth-child(even) {
 	background: #d8e5ba;
 }
