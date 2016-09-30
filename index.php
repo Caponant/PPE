@@ -60,8 +60,8 @@
 												AND etape.TRNNUM = ".$TRNNUM."
 												ORDER BY ETPHREDEBUT ASC;";
 								
-								$depart = executeSQL($depart_sql); 
-								$depart = tableSQL($depart);
+								$depart = mysql_query($depart_sql); 
+								$depart = mysql_fetch_array($depart,MYSQL_BOTH);
 								
 								echo $depart[0]; 
 							?>
@@ -69,15 +69,15 @@
 							
 						<td> 
 							<?php
-								//ajout de l'info "arrivee"
+							//ajout de l'info "depart"
 								$arrivee_sql =  "SELECT LIEUNOM 
 												FROM lieu,etape
 												WHERE etape.LIEUID = lieu.LIEUID
 												AND etape.TRNNUM = ".$TRNNUM."
 												ORDER BY ETPHREDEBUT DESC;";
 								
-								$arrivee = executeSQL($arrivee_sql); 
-								$arrivee = tableSQL($arrivee);
+								$arrivee = mysql_query($arrivee_sql); 
+								$arrivee = mysql_fetch_array($arrivee,MYSQL_BOTH);
 								
 								echo $arrivee[0]; 
 							?>
