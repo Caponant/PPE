@@ -137,7 +137,7 @@
 				?>
 			/>
 				
-			<input id="annuler" name="annuler" type="reset" value="Annuler" />
+			<input id="cancel" type="button" name="retour" value="Annuler" onclick="location.href='index.php'" />
 	   	</form>
 	   	
    		<br/>
@@ -180,14 +180,14 @@
 								<input id='supprimer' name='supprimer' type='submit' value='Supprimer' /> 
 							</form> </td>";
 					
-					echo"<td><img src=\"./image/modif02.png\" alt=\"erreur\" onclick=\"location.href='./AC13.php'\" style=\"cursor:pointer;\" ></td>";
+					echo"<td><img src=\"./image/modif02.png\" alt=\"erreur\" onclick=\"location.href='./AC13M.php'\" style=\"cursor:pointer;\" ></td>";
 					echo"</tr>";
 				}
     		?>
 
 		</table>
 		
-		<form id="AC13" action="AC13.php">
+		<form id="AC13" action="AC13A.php">
 			<input id="tournee" name="tournee" type="hidden" value="<?php echo "$TRNNUM" ?>" />
 			<input id="ajouter" name="ajouter" type="submit" value="Ajouter" />
 		</form>

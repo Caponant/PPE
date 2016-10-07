@@ -97,7 +97,7 @@
 				?>
 			/>
 				
-			<input id="annuler" name="annuler" type="reset" value="Annuler" />
+			<input id="cancel" type="button" name="retour" value="Annuler" onclick="location.href='index.php'" />
 	   	</form>
 	   	
    		<br/>
