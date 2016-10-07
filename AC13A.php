@@ -10,7 +10,7 @@
 	</head>
 	
 	<body>
-		<form action="AC13traitement.php" method="GET">
+		<form action="AC13traitementA.php" method="GET">
 			<label for="Lieu" >Lieu</label>
 			<select size="1" name="lieu" id="lieu">
 				<option value="NULL">Selectionnez un lieu</option>

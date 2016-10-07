@@ -6,6 +6,7 @@
 	$Debut = $_GET['RDVDebut'];
 	$Fin = $_GET['RDVFin'];
 	$Commentaire = $_GET['commentaire'];
+	$ETPID = $_GET['etape'];
 	
 	$sql = "SELECT ETPID
 			FROM etape
@@ -15,15 +16,17 @@
 	
 	$cpt = compteSQL($sql);
 	
-	$ETPID = $cpt + 1;
-	
-	$sql = "INSERT INTO etape(TRNNUM, ETPID, LIEUID, ETPHREDEBUT, ETPHREFIN, ETPCOMMENTAIRE)
-			VALUES (\"$TRNNUM\", \"$ETPID\",\"$IDLieu\", \"$Debut\", \"$Fin\", \"$Commentaire\");";
+	$sql = "UPDATE etape
+			SET LIEUID = '$IDLieu',
+			ETPHREDEBUT = '$Debut',
+			ETPHREFIN = '$Fin',
+			ETPCOMMENTAIRE = '$Commentaire'
+			WHERE ETPID = $ETPID;";
 					
 	$result = mysql_query($sql);
 	
 	if ($result)
-		echo "<meta http-equiv='refresh' content='0;url=AC12.php?message=<font color=green> Ajout realisee ! </font> <input id=\"tournee\" name=\"tournee\" type=\"hidden\" value=\"<?php echo \"$TRNNUM\" ?>\" />'>";
+		echo "<meta http-equiv='refresh' content='0;url=AC12M.php?message=<font color=green> Modification realisee ! </font> <input id=\"tournee\" name=\"tournee\" type=\"hidden\" value=\"<?php echo \"$TRNNUM\" ?>\" />'>";
 		else
-			echo "<meta http-equiv='refresh' content='0;url=AC12.php?message=<font color=red> Probleme pour ajouter ... </font>'>";
+			echo "<meta http-equiv='refresh' content='0;url=AC12M.php?message=<font color=red> Probleme pour modifier ... </font>'>";
 ?>
