@@ -21,7 +21,7 @@
 			ETPHREDEBUT = '$Debut',
 			ETPHREFIN = '$Fin',
 			ETPCOMMENTAIRE = '$Commentaire'
-			WHERE ETPID = $ETPID;";
+			WHERE ETPID = '$ETPID';";
 					
 	$result = mysql_query($sql);
 	
